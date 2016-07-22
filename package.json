@@ -24,8 +24,14 @@
     "clean-install": "npm run clean && npm install",
     "clean-start": "npm run clean && npm start",
     "watch": "./node_modules/.bin/webpack --watch --progress --profile",
-    "build": "./node_modules/.bin/del dist && ./node_modules/.bin/webpack --progress --profile",
-    "server": "./node_modules/.bin/webpack-dev-server --inline --progress --port 3000",
+    "build": "./node_modules/.bin/del dist && ./node_modules/.bin/webpack -p --progress --profile",
+
+    "server": "npm run server:dev",
+    "server:dev": "./node_modules/.bin/webpack-dev-server --inline --progress --port 3000",
+    "server:prod": "http-server dist --cors",
+
+    "deploy": "gh-pages -d dist",
+
     "webdriver-update": "./node_modules/.bin/webdriver-manager update",
     "webdriver-start": "./node_modules/.bin/webdriver-manager start",
     "lint": "./node_modules/.bin/tsconfig-lint",
@@ -48,8 +54,8 @@
   },
   "devDependencies": {
     "@angular/common": "2.0.0-rc.2",
-    "@angular/core": "2.0.0-rc.2",
     "@angular/compiler": "2.0.0-rc.2",
+    "@angular/core": "2.0.0-rc.2",
     "@angular/platform-browser": "2.0.0-rc.2",
     "@angular/platform-browser-dynamic": "2.0.0-rc.2",
     "autoprefixer": "6.3.6",
@@ -60,8 +66,10 @@
     "es6-shim": "0.35.1",
     "extract-text-webpack-plugin": "1.0.1",
     "file-loader": "0.8.5",
+    "gh-pages": "^0.11.0",
     "html-loader": "0.4.3",
     "html-webpack-plugin": "2.19.0",
+    "http-server": "^0.9.0",
     "istanbul-instrumenter-loader": "0.2.0",
     "jasmine-core": "2.4.1",
     "jasmine-spec-reporter": "2.4.0",

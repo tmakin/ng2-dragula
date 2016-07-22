@@ -1,5 +1,7 @@
 # ng2-dragula : Content Builder
 
+[Online Demo](https://tmakin.github.io/ng2-dragula/)
+
 ## Intro
 Experiment with ng2-dragula to create a content builder interface insipred by
 [this jquery tool](http://innovastudio.com/builderdemo/example1.html)
