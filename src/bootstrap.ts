@@ -4,7 +4,7 @@ import {enableProdMode} from "@angular/core";
 import {bootstrap} from '@angular/platform-browser-dynamic';
 import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
 
-const ENV_PROVIDERS = [];
+const ENV_PROVIDERS:any[] = [];
 // depending on the env mode, enable prod mode or add debugging modules
 if (process.env.ENV === 'prod') {
   enableProdMode();

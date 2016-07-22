@@ -63,16 +63,16 @@ export class ExampleA {
 class ExampleB {
 
   constructor(private dragulaService: DragulaService) {
-    dragulaService.drag.subscribe((value) => {
+    dragulaService.drag.subscribe((value:any) => {
       this.onDrag(value.slice(1));
     });
-    dragulaService.drop.subscribe((value) => {
+    dragulaService.drop.subscribe((value:any) => {
       this.onDrop(value.slice(1));
     });
-    dragulaService.over.subscribe((value) => {
+    dragulaService.over.subscribe((value:any) => {
       this.onOver(value.slice(1));
     });
-    dragulaService.out.subscribe((value) => {
+    dragulaService.out.subscribe((value:any) => {
       this.onOut(value.slice(1));
     });
   }
@@ -121,19 +121,19 @@ class ExampleB {
 export class ExampleB {
 
   constructor(private dragulaService: DragulaService) {
-    dragulaService.drag.subscribe((value) => {
+    dragulaService.drag.subscribe((value: any) => {
       //console.log(`drag: ${value[0]}`); // value[0] will always be bag name
       this.onDrag(value.slice(1));
     });
-    dragulaService.drop.subscribe((value) => {
+    dragulaService.drop.subscribe((value: any) => {
       //console.log(`drop: ${value[0]}`);
       this.onDrop(value.slice(1));
     });
-    dragulaService.over.subscribe((value) => {
+    dragulaService.over.subscribe((value: any) => {
       //console.log(`over: ${value[0]}`);
       this.onOver(value.slice(1));
     });
-    dragulaService.out.subscribe((value) => {
+    dragulaService.out.subscribe((value: any) => {
       //console.log(`out: ${value[0]}`);
       this.onOut(value.slice(1));
     });
@@ -450,10 +450,10 @@ class RepeatExample {
   public many2: Array&lt;string&gt; = ['Explore', 'them'];
 
   constructor(private dragulaService: DragulaService) {
-    dragulaService.dropModel.subscribe((value) => {
+    dragulaService.dropModel.subscribe((value:any) => {
       this.onDropModel(value.slice(1));
     });
-    dragulaService.removeModel.subscribe((value) => {
+    dragulaService.removeModel.subscribe((value:any) => {
       this.onRemoveModel(value.slice(1));
     });
   }
@@ -478,10 +478,10 @@ export class RepeatExample {
   public many2: Array<string> = ['Explore', 'them'];
 
   constructor(private dragulaService: DragulaService) {
-    dragulaService.dropModel.subscribe((value) => {
+    dragulaService.dropModel.subscribe((value:any) => {
       this.onDropModel(value.slice(1));
     });
-    dragulaService.removeModel.subscribe((value) => {
+    dragulaService.removeModel.subscribe((value:any) => {
       this.onRemoveModel(value.slice(1));
     });
   }
