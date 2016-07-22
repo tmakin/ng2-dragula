@@ -63,12 +63,13 @@ a:hover {
 
 pre {
   white-space: pre-wrap;
+  font-size: 10px;
 }
 
 pre code {
   color: #fff;
-  font-size: 14px;
-  line-height: 1.3;
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 label {
@@ -132,6 +133,7 @@ button:hover {
 /* dragula-specific example page styles */
 .wrapper {
   display: table;
+  width:100%
 }
 .container {
   display: table-cell;
@@ -145,19 +147,19 @@ button:hover {
  * note that styling gu-mirror directly is a bad practice because it's too generic.
  * you're better off giving the draggable elements a unique class and styling that directly!
  */
-.container div,
+.container > div,
 .gu-mirror {
   margin: 10px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.2);
   transition: opacity 0.4s ease-in-out;
 }
-.container div {
-  cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
+
+.container div.title
+{
+  margin: 0 0 0 0;
 }
+
 .gu-mirror {
   cursor: grabbing;
   cursor: -moz-grabbing;
@@ -169,12 +171,17 @@ button:hover {
 .container.ex-over {
   background-color: rgba(255, 255, 255, 0.3);
 }
+
 .handle {
-  padding: 0 5px;
+  padding: 10px;
   margin-right: 5px;
   background-color: rgba(0, 0, 0, 0.4);
-  cursor: move;
+
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
+
 nested-repeat-example .container span {
   display: block;
   padding: 8px;

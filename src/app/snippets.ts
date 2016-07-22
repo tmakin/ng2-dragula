@@ -11,18 +11,37 @@ import {DragulaService} from './providers/dragula.provider';
     viewProviders: [DragulaService],
     template:`
   <div class='parent'>
-    <label for='hy'><strong>Angular-specific example.</strong> Fancy some <code>ngFor</code>?</label>
+    <label for='hy'>One way drag from left to right</label>
+    
     <div class='wrapper'>
-      <div class='container' [dragula]='"snippets"' [dragulaModel]='transformSnippets()' id="snippets">
-        <div *ngFor='let snippet of snippets'>{{snippet.data}}</div>
+    
+      <div class="container">
+        <div class="title">Snippets <button (click)="flip()">Flip</button></div>
       </div>
       
+      <div class="container">
+        <div class="title">Paragraphs <button (click)="reset()">Clear</button></div>
+      </div>
+      
+    </div>
+    
+    <div class='wrapper'>  
+      <div class='container' [dragula]='"snippets"' [dragulaModel]='transformSnippets()' id="snippets">
+       <!-- Make sure you don't put any other elements in here or the model sync will get confused -->
+        <div *ngFor='let snippet of snippets' class="handle">{{snippet.data}}</div>
+      </div>
+      
+   
       <div class='container' [dragula]='"snippets"' [dragulaModel]='paras' id="document">
         <div *ngFor='let para of paras'>
-        <div>Snippet: {{para.snippetId}}</div>
+        <div class="handle">Parent Snippet: {{para.snippetId}}</div>
         {{para.text}}
         </div>
       </div>
+    </div>
+    <div class='wrapper'>
+      <div class='container'><pre>{{snippets | json}}</pre></div>
+      <div class='container'><pre>{{paras | json}}</pre></div>
     </div>
   </div>
   `
@@ -46,8 +65,8 @@ export class SnippetExample {
     ];
 
 
-    private snippets: Snippet[] = [];
-    private paras: Para[] = [];
+    public snippets: Snippet[] = [];
+    public paras: Para[] = [];
 
     private static buildSnippets() {
 
@@ -72,15 +91,13 @@ export class SnippetExample {
             this.onRemoveModel(value.slice(1));
         });
 
-        this.snippets = SnippetExample.buildSnippets();
-        this.paras = [];
-
         dragulaService.setOptions('snippets', {
             isContainer: function (el:any) {
                 return false; // only elements in drake.containers will be taken into account
             },
             moves: function (el:Element, source:Element, handle:any, sibling:any) {
-                return true; // elements are always draggable by default
+                //NB: classList not supported on IE <= 9
+                return handle.classList.contains('handle');
             },
             accepts: function (el:Element, target:Element, source:any, sibling:any) {
                 return target.id === "document";
@@ -96,10 +113,21 @@ export class SnippetExample {
             mirrorContainer: document.body,    // set the element that gets mirror elements appended
             ignoreInputTextSelection: true     // allows users to select input text, see details below
         });
+
+        this.snippets = SnippetExample.buildSnippets();
+        this.paras = [];
+
     }
 
-    private transformSnippets():Para[]
-    {
+    public flip() {
+        this.snippets.reverse();
+    }
+
+    public reset() {
+        this.paras = [];
+    }
+
+    public transformSnippets():Array<Para> {
         var transformed:Para[] = [];
 
         this.snippets.forEach(function(snippet) {
@@ -114,28 +142,28 @@ export class SnippetExample {
 
     private onDropModel(args: any) {
         let [el, target, source] = args;
-        console.log('onDropModel:');
-        console.log(el);
-        console.log(target);
-        console.log(source);
+        //console.log('onDropModel:');
+        //console.log(el);
+        //console.log(target);
+        //console.log(source);
 
         return false;
     }
 
     private onRemoveModel(args: any) {
         let [el, source] = args;
-        console.log('onRemoveModel:');
-        console.log(el);
-        console.log(source);
+        //console.log('onRemoveModel:');
+        //console.log(el);
+        //console.log(source);
     }
 }
 
-interface Snippet {
+export interface Snippet {
     id:number;
     data:string;
 }
 
-interface Para {
+export interface Para {
     snippetId:number;
     text:string;
 }
