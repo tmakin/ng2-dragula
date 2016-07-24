@@ -54,7 +54,8 @@ module.exports = function makeWebpackConfig() {
    */
   config.output = ENV === 'test' ? {} : {
     path: root('dist'),
-    publicPath: '/ng2-dragula/',
+    //publicPath: '/ng2-dragula/',
+    publicPath: '/',
     filename: 'js/[name].js',
     chunkFilename: ENV === 'build' ? '[id].chunk.js?[hash]' : '[id].chunk.js'
   };

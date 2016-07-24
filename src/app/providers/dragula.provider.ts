@@ -28,6 +28,9 @@ export class DragulaService {
     'removeModel'
   ];
   private bags: Array<any> = [];
+  private modelTransformMap: Map<any, DragulaTransformFunc> = new Map<any, DragulaTransformFunc>();
+  //private defaultTransformFunc: DragulaTransformFunc = (source:any) => JSON.parse(JSON.stringify(source));
+
 
   public add(name: string, drake: any): any {
     let bag = this.find(name);
@@ -68,6 +71,25 @@ export class DragulaService {
     this.handleModels(name, bag.drake);
   }
 
+  public registerModelTransform(model:any, modelTransform:DragulaTransformFunc) {
+    this.modelTransformMap.set(model, modelTransform);
+  }
+
+  public transformModel(model: any[], index:number, copy: boolean) {
+    var item = model[index];
+    if(!item) {
+      return null;
+    }
+
+    let customTransform = this.modelTransformMap.get(model);
+
+    if(customTransform == null) {
+      return copy ? JSON.parse(JSON.stringify(item)) : item;
+    }
+
+    return customTransform(item);
+  }
+
   private handleModels(name: string, drake: any) {
     let dragElm: any;
     let dragIndex: number;
@@ -100,7 +122,7 @@ export class DragulaService {
       } else {
         let notCopy = dragElm === dropElm;
         let targetModel = drake.models[drake.containers.indexOf(target)];
-        let dropElmModel = notCopy ? sourceModel[dragIndex] : JSON.parse(JSON.stringify(sourceModel[dragIndex]));
+        let dropElmModel = this.transformModel(sourceModel, dragIndex, !notCopy);
 
         if (notCopy) {
           sourceModel.splice(dragIndex, 1);
@@ -129,3 +151,5 @@ export class DragulaService {
     return Array.prototype.indexOf.call(parent.children, child);
   }
 }
+
+export type DragulaTransformFunc = (source: any) => any;

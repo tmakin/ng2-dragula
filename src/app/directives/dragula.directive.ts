@@ -15,6 +15,7 @@ import * as dragula from 'dragula';
 export class Dragula implements OnInit, OnChanges {
   @Input('dragula') bag: string;
   @Input() dragulaModel: any;
+  @Input() dragulaModelTransform: (src: any) => any;
   private container: any;
   private drake: any;
 
@@ -31,6 +32,10 @@ export class Dragula implements OnInit, OnChanges {
           this.drake.models.push(this.dragulaModel);
         } else {
           this.drake.models = [this.dragulaModel];
+        }
+
+        if(this.dragulaModelTransform) {
+          this.dragulaService.registerModelTransform(this.dragulaModel, this.dragulaModelTransform);
         }
       }
     };

@@ -1,22 +1,34 @@
 /**
  * Created by tmakin on 21/07/2016.
  */
-import {Component} from '@angular/core';
+import {Component,Directive, ElementRef, Input} from '@angular/core';
 import {Dragula} from './directives/dragula.directive';
 import {DragulaService} from './providers/dragula.provider';
+import {DomSanitizationService, SafeHtml} from "@angular/platform-browser";
+
+@Directive({ selector: '[customHighlight]' })
+export class CustomHighlight {
+    @Input() customHighlight:any;
+
+    constructor(el: ElementRef) {
+        el.nativeElement.style.backgroundColor = 'yellow';
+    }
+}
 
 @Component({
     selector: 'repeat-example',
-    directives: [Dragula],
+    directives: [Dragula, CustomHighlight],
     viewProviders: [DragulaService],
     template:`
   <div class='parent'>
-    <label for='hy'>One way drag from left to right</label>
+    <label for='hy'>One way drag from left to right.
+    <code>Snippet</code> models are transformed into <code>Paragraph</code> models 
+    on drop using the <code>[dragulaModelTransform]</code> attribute</label>
     
     <div class='wrapper'>
     
       <div class="container">
-        <div class="title">Snippets <button (click)="flip()">Flip</button></div>
+        <div class="title" [customHighlight]>Snippets <button (click)="flip()">Flip</button></div>
       </div>
       
       <div class="container">
@@ -26,16 +38,20 @@ import {DragulaService} from './providers/dragula.provider';
     </div>
     
     <div class='wrapper'>  
-      <div class='container' [dragula]='"snippets"' [dragulaModel]='transformSnippets()' id="snippets">
+      <div class='container' 
+      [dragula]='"snippets"' 
+      [dragulaModel]='snippets'
+      [dragulaModelTransform]='transformSnippet'
+      id="snippets">
        <!-- Make sure you don't put any other elements in here or the model sync will get confused -->
-        <div *ngFor='let snippet of snippets' class="handle">{{snippet.data}}</div>
+        <div *ngFor='let snippet of snippets'><div class="handle" [innerHtml]="snippet.dataSafe"></div></div>
       </div>
       
    
       <div class='container' [dragula]='"snippets"' [dragulaModel]='paras' id="document">
         <div *ngFor='let para of paras'>
         <div class="handle">Parent Snippet: {{para.snippetId}}</div>
-        {{para.text}}
+        <div [innerHtml]="para?.textSafe"></div>
         </div>
       </div>
     </div>
@@ -49,8 +65,9 @@ import {DragulaService} from './providers/dragula.provider';
 
 export class SnippetExample {
 
+    //the prensence of <custom-component> will cause angular sanitizer warnings
     static SNIPPET_DATA:string[] = [
-        "dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis",
+        "dolor elit, <span [customHighlight]>pellentesque</span> a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis",
         "ornare. In faucibus. Morbi vehicula. Pellentesque tincidunt tempus risus. Donec egestas. Duis ac arcu. Nunc mauris. Morbi non sapien molestie orci tincidunt adipiscing. Mauris molestie pharetra nibh. Aliquam",
         "dictum augue malesuada malesuada. Integer id magna et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor",
         "quis accumsan convallis, ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec",
@@ -68,22 +85,8 @@ export class SnippetExample {
     public snippets: Snippet[] = [];
     public paras: Para[] = [];
 
-    private static buildSnippets() {
 
-        let snippets:any[] = [];
-
-        SnippetExample.SNIPPET_DATA.forEach(function(value, index) {
-            snippets.push({
-                id:index+1,
-                data: value
-            });
-        });
-
-        return snippets;
-    }
-
-
-    constructor(private dragulaService: DragulaService) {
+    constructor(private dragulaService: DragulaService, private sanitizer: DomSanitizationService) {
         dragulaService.dropModel.subscribe((value: any) => {
             this.onDropModel(value.slice(1));
         });
@@ -97,10 +100,10 @@ export class SnippetExample {
             },
             moves: function (el:Element, source:Element, handle:any, sibling:any) {
                 //NB: classList not supported on IE <= 9
-                return handle.classList.contains('handle');
+                return source.id === "snippets" || handle.classList.contains('handle');
             },
             accepts: function (el:Element, target:Element, source:any, sibling:any) {
-                return target.id === "document";
+                return target.id !== "snippets";
             },
             copy: function (el:Element, source:Element) {
                 return source.id === "snippets";
@@ -114,7 +117,7 @@ export class SnippetExample {
             ignoreInputTextSelection: true     // allows users to select input text, see details below
         });
 
-        this.snippets = SnippetExample.buildSnippets();
+        this.snippets = this.buildSnippets(this.sanitizer);
         this.paras = [];
 
     }
@@ -127,18 +130,32 @@ export class SnippetExample {
         this.paras = [];
     }
 
-    public transformSnippets():Array<Para> {
-        var transformed:Para[] = [];
+    public transformSnippet(snippet:Snippet):Para {
 
-        this.snippets.forEach(function(snippet) {
-           transformed.push({
-              snippetId: snippet.id,
-              text: snippet.data
-           });
+        console.log("transform func", snippet);
+        return {
+            snippetId: snippet.id,
+            text: snippet.data,
+            textSafe: snippet.dataSafe
+        };
+    }
+
+    private buildSnippets(sanitizer:DomSanitizationService) {
+
+        let snippets:any[] = [];
+
+        SnippetExample.SNIPPET_DATA.forEach(function(value, index) {
+            var data = `<div>${value}</div>`;
+            snippets.push({
+                id:index+1,
+                data: data,
+                dataSafe: sanitizer.bypassSecurityTrustHtml(data)
+            });
         });
 
-        return transformed;
+        return snippets;
     }
+
 
     private onDropModel(args: any) {
         let [el, target, source] = args;
@@ -161,9 +178,11 @@ export class SnippetExample {
 export interface Snippet {
     id:number;
     data:string;
+    dataSafe: SafeHtml;
 }
 
 export interface Para {
     snippetId:number;
     text:string;
+    textSafe: SafeHtml;
 }

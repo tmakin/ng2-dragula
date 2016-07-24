@@ -161,10 +161,10 @@ button:hover {
 }
 
 .gu-mirror {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-}
+   cursor: grabbing;
+   cursor: -moz-grabbing;
+   cursor: -webkit-grabbing;
+ }
 .container .ex-moved {
   background-color: #e74c3c;
 }
@@ -180,9 +180,4 @@ button:hover {
   cursor: grab;
   cursor: -moz-grab;
   cursor: -webkit-grab;
-}
-
-nested-repeat-example .container span {
-  display: block;
-  padding: 8px;
 }
