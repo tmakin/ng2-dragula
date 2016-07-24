@@ -28,7 +28,7 @@ export class CustomHighlight {
     <div class='wrapper'>
     
       <div class="container">
-        <div class="title" [customHighlight]>Snippets <button (click)="flip()">Flip</button></div>
+        <div class="title">Snippets <button (click)="flip()">Flip</button></div>
       </div>
       
       <div class="container">

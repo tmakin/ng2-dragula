@@ -6,7 +6,7 @@ import {
   OnChanges,
   SimpleChange
 } from '@angular/core';
-import {DragulaService} from '../providers/dragula.provider';
+import {DragulaService, DragulaTransformFunc} from '../providers/dragula.provider';
 import * as dragula from 'dragula';
 
 @Directive({
@@ -15,7 +15,7 @@ import * as dragula from 'dragula';
 export class Dragula implements OnInit, OnChanges {
   @Input('dragula') bag: string;
   @Input() dragulaModel: any;
-  @Input() dragulaModelTransform: (src: any) => any;
+  @Input() dragulaModelTransform: DragulaTransformFunc;
   private container: any;
   private drake: any;
 
