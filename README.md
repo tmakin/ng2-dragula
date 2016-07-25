@@ -6,8 +6,7 @@
 Experiment with ng2-dragula to create a content builder interface insipred by
 [this jquery tool](http://innovastudio.com/builderdemo/example1.html)
 
-Apart from minor typescript annotations the source code of the ng2-dragula code has not been modified. 
-Only the example code has been messed with.
+The dragula directive and provider has been extended to allow the model to be transormed on drop
 
 ## Requirements
 - Copy from source list
@@ -17,19 +16,17 @@ Only the example code has been messed with.
 - Transform of model type on drop
 
 ## Model Transformation
-Our `snippets.ts` example gets round the problem of model transformation by performing all transforms up front.
-This relies on the fact that `[dragulaModel]` and the associated `ng-for` do not need to be reference the same variable, 
-they just need to be the same length. 
+A new input has been added to the dragula directive `[dragulaModelTransform]`.
+When defined this function replaces the `JSON.parse(JSON.stringify(model))` call inside
+`DragulaService`. Motivation:
+- Custom clone behaviour which may be necessary for complex types. the `JSON.Parse` approach will deserialize
+all class instances as plain javascript objects.
+- Allow transformation from one model type to another
 
-## Suggestion 
-To make the model sync more flexible it would be useful to add a hook to dragula to use a custom copy function.
-Currently the copying is achived using `JSON.parse(JSON.stringify(model))` which will guarantee a deep clone 
-but will potentially mangle complex types and dates.
-
-A custom function would allow the JSON.parse implementation to be overridden and allow the model to be transformed
-if required.
-
-Ideally this would be implemented on a per-directive basis, but a global override for `DragulaService` would also be useful
+## Other Suggestions
+- Track the container/model relationships by reference rather than index.
+Currently if you define a model for `listB` but not `listA` then `drake.models`
+will be out of sync with `drake.containers` and can lead to confusing bugs.
 
 ## Related discussions:
 [https://github.com/valor-software/ng2-dragula/issues/156](https://github.com/valor-software/ng2-dragula/issues/156)
