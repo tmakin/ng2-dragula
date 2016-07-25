@@ -124,6 +124,10 @@ export class DragulaService {
         let targetModel = drake.models[drake.containers.indexOf(target)];
         let dropElmModel = this.transformModel(sourceModel, dragIndex, !notCopy);
 
+        if(dropElmModel == null) {
+          return;
+        }
+
         if (notCopy) {
           sourceModel.splice(dragIndex, 1);
         }
