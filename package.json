@@ -24,14 +24,11 @@
     "clean-install": "npm run clean && npm install",
     "clean-start": "npm run clean && npm start",
     "watch": "./node_modules/.bin/webpack --watch --progress --profile",
-    "build": "./node_modules/.bin/del dist && ./node_modules/.bin/webpack -p --progress --profile",
-
+    "build": "./node_modules/.bin/del dist && ./node_modules/.bin/webpack -p --config ./webpack.prod.js --progress --profile",
     "server": "npm run server:dev",
     "server:dev": "./node_modules/.bin/webpack-dev-server --inline --progress --port 3001",
     "server:prod": "http-server dist --cors",
-
     "deploy": "gh-pages -d dist",
-
     "webdriver-update": "./node_modules/.bin/webdriver-manager update",
     "webdriver-start": "./node_modules/.bin/webdriver-manager start",
     "lint": "./node_modules/.bin/tsconfig-lint",
@@ -102,6 +99,7 @@
     "url-loader": "0.5.7",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1",
+    "webpack-merge": "^0.14.1",
     "zone.js": "0.6.12"
   }
 }

@@ -4,20 +4,10 @@
 import {Component,Directive, ElementRef, Input} from '@angular/core';
 import {Dragula} from './directives/dragula.directive';
 import {DragulaService} from './providers/dragula.provider';
-import {DomSanitizationService, SafeHtml} from "@angular/platform-browser";
-
-@Directive({ selector: '[customHighlight]' })
-export class CustomHighlight {
-    @Input() customHighlight:any;
-
-    constructor(el: ElementRef) {
-        el.nativeElement.style.backgroundColor = 'yellow';
-    }
-}
 
 @Component({
     selector: 'repeat-example',
-    directives: [Dragula, CustomHighlight],
+    directives: [Dragula],
     viewProviders: [DragulaService],
     template:`
   <div class='parent'>
@@ -44,14 +34,14 @@ export class CustomHighlight {
       [dragulaModelTransform]='transformSnippet'
       id="snippets">
        <!-- Make sure you don't put any other elements in here or the model sync will get confused -->
-        <div *ngFor='let snippet of snippets'><div class="handle" [innerHtml]="snippet.dataSafe"></div></div>
+        <div *ngFor='let snippet of snippets'><div class="handle" [innerHtml]="snippet.data"></div></div>
       </div>
       
    
       <div class='container' [dragula]='"snippets"' [dragulaModel]='paras' id="document">
         <div *ngFor='let para of paras'>
         <div class="handle">Parent Snippet: {{para.snippetId}}</div>
-        <div [innerHtml]="para?.textSafe"></div>
+        <div [innerHtml]="para?.text"></div>
         </div>
       </div>
     </div>
@@ -67,7 +57,7 @@ export class SnippetExample {
 
     //the prensence of <custom-component> will cause angular sanitizer warnings
     static SNIPPET_DATA:string[] = [
-        "dolor elit, <span [customHighlight]>pellentesque</span> a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis",
+        "dolor elit, pellentesque a, facilisis non, bibendum sed, est. Nunc laoreet lectus quis",
         "ornare. In faucibus. Morbi vehicula. Pellentesque tincidunt tempus risus. Donec egestas. Duis ac arcu. Nunc mauris. Morbi non sapien molestie orci tincidunt adipiscing. Mauris molestie pharetra nibh. Aliquam",
         "dictum augue malesuada malesuada. Integer id magna et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor",
         "quis accumsan convallis, ante lectus convallis est, vitae sodales nisi magna sed dui. Fusce aliquam, enim nec",
@@ -86,7 +76,7 @@ export class SnippetExample {
     public paras: Para[] = [];
 
 
-    constructor(private dragulaService: DragulaService, private sanitizer: DomSanitizationService) {
+    constructor(private dragulaService: DragulaService) {
         dragulaService.dropModel.subscribe((value: any) => {
             this.onDropModel(value.slice(1));
         });
@@ -117,7 +107,7 @@ export class SnippetExample {
             ignoreInputTextSelection: true     // allows users to select input text, see details below
         });
 
-        this.snippets = this.buildSnippets(this.sanitizer);
+        this.snippets = this.buildSnippets();
         this.paras = [];
 
     }
@@ -135,12 +125,11 @@ export class SnippetExample {
         console.log("transform func", snippet);
         return {
             snippetId: snippet.id,
-            text: snippet.data,
-            textSafe: snippet.dataSafe
+            text: snippet.data
         };
     }
 
-    private buildSnippets(sanitizer:DomSanitizationService) {
+    private buildSnippets() {
 
         let snippets:any[] = [];
 
@@ -148,8 +137,7 @@ export class SnippetExample {
             var data = `<div>${value}</div>`;
             snippets.push({
                 id:index+1,
-                data: data,
-                dataSafe: sanitizer.bypassSecurityTrustHtml(data)
+                data: data
             });
         });
 
@@ -178,11 +166,9 @@ export class SnippetExample {
 export interface Snippet {
     id:number;
     data:string;
-    dataSafe: SafeHtml;
 }
 
 export interface Para {
     snippetId:number;
     text:string;
-    textSafe: SafeHtml;
 }
