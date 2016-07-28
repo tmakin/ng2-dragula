@@ -19,7 +19,7 @@ export declare class DragulaService {
     destroy(name: string): void;
     setOptions(name: string, options: any): void;
     registerModelTransform(model: any, modelTransform: DragulaTransformFunc): void;
-    transformModel(model: any[], index: number, copy: boolean): any;
+    transformModel(sourceModel: any[], index: number, targetModel: any[], copy: boolean): any;
     private handleModels(name, drake);
     private setupEvents(bag);
     private domIndexOf(child, parent);
