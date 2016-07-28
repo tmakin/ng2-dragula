@@ -24,7 +24,7 @@
     "clean-install": "npm run clean && npm install",
     "clean-start": "npm run clean && npm start",
     "watch": "./node_modules/.bin/webpack --watch --progress --profile",
-    "build": "./node_modules/.bin/del dist && ./node_modules/.bin/webpack -p --config ./webpack.prod.js --progress --profile",
+    "build": "./node_modules/.bin/del dist && webpack -p --config ./webpack.prod.js --progress --profile",
     "server": "npm run server:dev",
     "server:dev": "./node_modules/.bin/webpack-dev-server --inline --progress --port 3001",
     "server:prod": "http-server dist --cors",
@@ -46,15 +46,16 @@
     "dragula": "3.7.1"
   },
   "peerDependencies": {
-    "@angular/common": "^2.0.0-rc.2",
-    "@angular/core": "^2.0.0-rc.2"
+    "@angular/common": "^2.0.0-rc.4",
+    "@angular/core": "^2.0.0-rc.4"
   },
   "devDependencies": {
-    "@angular/common": "2.0.0-rc.2",
-    "@angular/compiler": "2.0.0-rc.2",
-    "@angular/core": "2.0.0-rc.2",
-    "@angular/platform-browser": "2.0.0-rc.2",
-    "@angular/platform-browser-dynamic": "2.0.0-rc.2",
+    "@angular/common": "2.0.0-rc.4",
+    "@angular/compiler": "2.0.0-rc.4",
+    "@angular/core": "2.0.0-rc.4",
+    "@angular/platform-browser": "2.0.0-rc.4",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.4",
+
     "autoprefixer": "6.3.6",
     "copy-webpack-plugin": "3.0.1",
     "css-loader": "0.23.1",

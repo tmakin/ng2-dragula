@@ -2,14 +2,14 @@
 
 import {enableProdMode} from "@angular/core";
 import {bootstrap} from '@angular/platform-browser-dynamic';
-import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
+//import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
 
 const ENV_PROVIDERS:any[] = [];
 // depending on the env mode, enable prod mode or add debugging modules
 if (process.env.ENV === 'prod') {
   enableProdMode();
 } else {
-  ENV_PROVIDERS.push(ELEMENT_PROBE_PROVIDERS);
+  //ENV_PROVIDERS.push(ELEMENT_PROBE_PROVIDERS);
 }
 
 /*

@@ -11,9 +11,11 @@ import {DragulaService} from './providers/dragula.provider';
     viewProviders: [DragulaService],
     template:`
   <div class='parent'>
+    <h3>Last Updated 28/07/2016</h3>
+   
     <label for='hy'>One way drag from left to right.
     <code>Snippet</code> models are transformed into <code>Paragraph</code> models 
-    on drop using the <code>[dragulaModelTransform]</code> attribute</label>
+    on drop using the <code>[dragulaModelTransform]</code> attribute.</label>
     
     <div class='wrapper'>
     
@@ -38,7 +40,7 @@ import {DragulaService} from './providers/dragula.provider';
       </div>
       
    
-      <div class='container' [dragula]='"snippets"' [dragulaModel]='paras' id="document">
+      <div class='container' [dragula]='"snippets"' [dragulaModel]='paras' [dragulaModelTransform]="transformSnippet" id="document">
         <div *ngFor='let para of paras'>
         <div class="handle">Parent Snippet: {{para.snippetId}}</div>
         <div [innerHtml]="para?.text"></div>

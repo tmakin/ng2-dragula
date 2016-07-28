@@ -75,13 +75,14 @@ export class DragulaService {
     this.modelTransformMap.set(model, modelTransform);
   }
 
-  public transformModel(model: any[], index:number, copy: boolean) {
-    var item = model[index];
+  public transformModel(sourceModel: any[], index:number, targetModel: any[], copy: boolean) {
+    var item = sourceModel[index];
     if(!item) {
       return null;
     }
 
-    let customTransform = this.modelTransformMap.get(model);
+    //lookup transformation for target model
+    let customTransform = this.modelTransformMap.get(targetModel);
 
     if(customTransform == null) {
       return copy ? JSON.parse(JSON.stringify(item)) : item;
@@ -122,7 +123,7 @@ export class DragulaService {
       } else {
         let notCopy = dragElm === dropElm;
         let targetModel = drake.models[drake.containers.indexOf(target)];
-        let dropElmModel = this.transformModel(sourceModel, dragIndex, !notCopy);
+        let dropElmModel = this.transformModel(sourceModel, dragIndex, targetModel, !notCopy);
 
         if(dropElmModel == null) {
           return;
