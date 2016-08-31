@@ -43,7 +43,7 @@
     "postversion": "git push origin master && git push --tags"
   },
   "dependencies": {
-    "dragula": "3.7.1"
+    "dragula": "https://github.com/tmakin/dragula/tarball/30c0c9d6b655875a74a910a24cbdc50635d5e7d5"
   },
   "peerDependencies": {
     "@angular/common": "^2.0.0-rc.4",

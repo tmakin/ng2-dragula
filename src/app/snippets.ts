@@ -103,8 +103,8 @@ export class SnippetExample {
 
             direction: 'vertical',             // Y axis is considered when determining where an element would be dropped
             copySortSource: false,             // elements in copy-source containers can be reordered
-            revertOnSpill: false,              // spilling will put the element back where it was dragged from, if this is true
-            removeOnSpill: true,               // spilling will `.remove` the element, if this is true
+            revertOnSpill: true,              // spilling will put the element back where it was dragged from, if this is true
+            removeOnSpill: false,               // spilling will `.remove` the element, if this is true
             mirrorContainer: document.body,    // set the element that gets mirror elements appended
             ignoreInputTextSelection: true     // allows users to select input text, see details below
         });
